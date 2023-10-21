@@ -182,3 +182,66 @@ iframe {
   width: 20px;
   height: 20px;
 }
+.video-list {
+  padding: 80px 0;
+}
+
+.video-list__title {
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin-bottom: 40px;
+}
+
+.video-list__items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px 12px;
+}
+
+.video-card {
+  position: relative;
+}
+
+.video-card__thumbnail {
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+.video-card__title {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+
+.video-card__channel {
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.video-card__duration {
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.video-card__favorite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.video-card__icon {
+  width: 20px;
+  height: 20px;
+}
+.video-card__favorite .star {
+  display: none;
+}
+
+.video-card__favorite_active .star {
+  display: block;
+}
+.video-card__icon {
+}
