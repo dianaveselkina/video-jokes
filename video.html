@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>video-jokes - Смешное видео</title>
+    <link rel="stylesheet" href="/css/normalize.css" />
+    <link rel="stylesheet" href="/css/index.css" />
   </head>
   <body>
     <header class="header">
-      <div class="container">
+      <div class="container header__container">
         <a class="header__link" href="/">
           <svg
             class="header__logo"
@@ -19,11 +21,11 @@
           </svg>
         </a>
         <a class="header__link header__link_favorite" href="/favorite.html"
-          ><span>Избранное</span></a
-        >
-        <svg class="header__icon">
-          <use xlink:href="/image/sprite.svg#star-ob"></use>
-        </svg>
+          ><span>Избранное</span>
+          <svg class="header__icon">
+            <use xlink:href="/image/sprite.svg#star-ob"></use>
+          </svg>
+        </a>
       </div>
     </header>
     <main>
