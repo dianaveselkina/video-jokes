@@ -56,19 +56,28 @@
               allowfullscreen
             ></iframe>
           </div>
-          <div class="video__content">
-            <a class="video__link header__link_favorite" href="/favorite.html"
-              >В избранном</a
+          <div class="video__container">
+            <div class="video__content">
+              <h3 class="video__title">Философия Идущего к реке</h3>
+              <p class="video__channel">Правое полушарие интроверта</p>
+              <p class="video__info">
+                <span class="video__views">1 575 581 просмотр</span>
+                <span class="video__date">Дата премьеры: 16 авг. 2024 г.</span>
+              </p>
+              <p class="video__description">
+                Смотрите наш курс-саммари «Как понимать философию» фоном.
+              </p>
+            </div>
+            <button
+              class="video__link video__link_active"
+              href="/favorite.html"
             >
-            <h3 class="video__title">Философия Идущего к реке</h3>
-            <p class="video__channel">Правое полушарие интроверта</p>
-            <p class="video__info">
-              <span class="video__views">1 575 581 просмотр</span>
-              <span class="video__date">Дата премьеры: 16 авг. 2024 г.</span>
-            </p>
-            <p class="video__description">
-              Смотрите наш курс-саммари «Как понимать философию» фоном.
-            </p>
+              <span class="video__no-favorite">Избранное</span>
+              <span class="video__favorite">В избранном</span>
+              <svg class="video__icon">
+                <use xlink:href="/image/sprite.svg#star-ob"></use>
+              </svg>
+            </button>
           </div>
         </div>
       </section>
@@ -146,29 +155,31 @@
             <use xlink:href="/image/sprite.svg#logo-white"></use>
           </svg>
         </a>
-        <ul class="footer__developers-list">
-          <li class="footer__developers-item">
-            Designer:
-            <a
-              class="footer__developers-link"
-              href="https://t.me/Mrshmallowww"
-              target="_blank"
-              rel="noopener"
-              >Anastasia Ilina</a
-            >
-          </li>
-          <li class="footer__developers-item">
-            Developer:
-            <a
-              class="footer__developers-link"
-              href="https://t.me/DianaVeselkina"
-              target="_blank"
-              rel="noopener"
-              >Diana Veselkina</a
-            >
-          </li>
-        </ul>
-        <p class="footer__copyright">© video-jokes, 2023</p>
+        <div class="footer__infa">
+          <ul class="footer__developers-list">
+            <li class="footer__developers-item">
+              Designer:
+              <a
+                class="footer__developers-link"
+                href="https://t.me/Mrshmallowww"
+                target="_blank"
+                rel="noopener"
+                >Anastasia Ilina</a
+              >
+            </li>
+            <li class="footer__developers-item">
+              Developer:
+              <a
+                class="footer__developers-link"
+                href="https://t.me/DianaVeselkina"
+                target="_blank"
+                rel="noopener"
+                >Diana Veselkina</a
+              >
+            </li>
+          </ul>
+          <p class="footer__copyright">© video-jokes, 2023</p>
+        </div>
       </div>
     </footer>
   </body>
