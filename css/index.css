@@ -32,6 +32,11 @@ body {
   color: #292d32;
   background-color: #fff;
   line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+}
+main {
+  flex-grow: 1;
 }
 img,
 svg {
