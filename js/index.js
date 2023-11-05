@@ -116,6 +116,30 @@ const fetchVideoData = async (id) => {
   }
 };
 
+const fetchSearchVideos = async (searchQuery, page) => {
+  try {
+    const url = new URL(SEARCH_URL);
+
+    url.searchParams.append('part', 'snippet');
+    url.searchParams.append('q', searchQuery);
+    url.searchParams.append('type', 'video');
+    url.searchParams.append('key', API_KEY);
+
+    if (page) {
+      url.searchParams.append('pageToken', page);
+    }
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('error: ', error);
+  }
+};
+
 const createListVideo = (videos, titleText, pagination) => {
   const videoListSection = document.createElement('section');
   videoListSection.classList.add('video-list');
@@ -135,16 +159,17 @@ const createListVideo = (videos, titleText, pagination) => {
     li.classList.add('video-list__item');
     li.innerHTML = `
       <article class="video-card">
-                <a class="video-card__link" href="/video.html?id=${video.id}">
+                <a class="video-card__link" href="#/video/${video.id}">
                   <img
                     class="video-card__thumbnail"
                     src="${
                       video.snippet.thumbnails.standard?.url ||
                       video.snippet.thumbnails.high?.url
                     }"
-                    alt="${video.snippet.title}"
-                  />
-                  <h3 class="video-card__title">${video.snippet.title}</h3>
+                    alt="Превью видео ${video.snippet.title}">
+                                    <h3 class="video-card__title">${
+                                      video.snippet.title
+                                    }</h3>
                   <p class="video-card__channel">${
                     video.snippet.channelTitle
                   }</p>
@@ -173,13 +198,21 @@ const createListVideo = (videos, titleText, pagination) => {
   });
   videoListItems.append(...listVideos);
 
+  if (pagination) {
+    //todo пагинация
+    console.log('пагинация');
+  }
+
+  videoListSection.append(container);
+  container.append(title, videoListItems);
   return videoListSection;
 };
 
-const displayVideo = ({ items: [video] }) => {
-  const videoElem = document.querySelector('.video');
-  console.log('video: ', video);
-  videoElem.innerHtml = `
+const createVideo = (video) => {
+  const videoSection = document.createElement('section');
+  videoSection.classList.add('video');
+
+  videoSection.innerHtml = `
   <div class="container">
           <div class="video__player">
           <iframe src="https://www.youtube.com/embed/${video.id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -206,6 +239,7 @@ const displayVideo = ({ items: [video] }) => {
           </div>
         </div>
         `;
+  return videoSection;
 };
 
 const createHero = () => {
@@ -215,7 +249,7 @@ const createHero = () => {
   heroSection.innerHTML = `
           <div class="container">
           <div class="hero__container">
-            <a class="hero__link" href="/favorite.html"
+            <a class="hero__link" href="/#favorite"
               ><span class="hero__link-text">Избранное</span>
               <svg class="hero__icon">
                 <use xlink:href="/image/sprite.svg#star-ow"></use>
@@ -280,7 +314,49 @@ const indexRoute = async () => {
   main.append(hero, search, listVideo);
 };
 
-const videoRoute = () => {};
+const createHeader = () => {
+  const headerElem = document.createElement('header');
+
+  headerElem.innerHTML = `
+        <div class="container header__container">
+        <a class="header__link" href="/">
+          <svg
+            class="header__logo"
+            viewBox="0 0 347 38"
+            role="img"
+            aria-label="Логотип сервиса video-jokes"
+          >
+            <use xlink:href="/image/sprite.svg#logo-turquoise"></use>
+          </svg>
+        </a>
+        <a class="header__link header__link_favorite" href="/favorite.html"
+          ><span class="header__link-text">Избранное</span>
+          <svg class="header__icon">
+            <use xlink:href="/image/sprite.svg#star-ob"></use>
+          </svg>
+        </a>
+      </div>
+      `;
+  return headerElem;
+};
+
+const videoRoute = async (ctx) => {
+  const id = ctx.data.id;
+  main.textContent = '';
+  preload.append();
+  document.body.prepend(createHeader());
+  const search = createSearch();
+  const data = await fetchVideoData(id);
+  const video = data.items[0];
+  preload.remove();
+  const videoSection = createVideo(video, 'В тренде');
+  main.append(search, videoSection);
+
+  const searchQuery = video.snippet.title;
+  const videos = await fetchSearchVideos(searchQuery);
+  const listVideo = createListVideo(video, 'Похожие видео');
+  main.append(listVideo);
+};
 const favoriteRoute = () => {};
 const searchRoute = () => {};
 
