@@ -378,7 +378,15 @@ iframe {
   letter-spacing: 0.02em;
   margin-bottom: 9px;
 }
-
+.preload {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  margin: auto;
+}
+.preload__text {
+  color: #23889e;
+}
 @media (width<=1024px) {
   .container {
     --container-width: 942px;

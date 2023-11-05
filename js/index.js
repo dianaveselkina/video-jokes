@@ -1,10 +1,31 @@
 const API_KEY = 'AIzaSyBHBWWQGCxKyKGmCq7bh2NvsMFuFlutoAQ';
 const VIDEOS_URL = 'https://www.googleapis.com/youtube/v3/videos';
 const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
+const router = new Navigo('/', { hash: true });
+
+const main = document.querySelector('main');
 
 const favoriteIds = JSON.parse(localStorage.getItem('favoriteVJ') || '[]');
 
-const videoListItems = document.querySelector('.video-list__items');
+const preload = {
+  elem: document.createElement('div'),
+  text: '<p class="preload__text">Загрузка...</p>',
+  append() {
+    main.style.display = 'flex';
+    main.style.margin = 'auto';
+    main.append(this.elem);
+  },
+  remove() {
+    main.style.display = '';
+    main.style.margin = '';
+    this.elem.remove();
+  },
+  init() {
+    this.elem.className = 'preload';
+    this.elem.innerHTML = this.text;
+  },
+};
+preload.init();
 
 const convertDuration = (isoDuration) => {
   const hoursMatch = isoDuration.match(/(\d+)H/);
@@ -80,7 +101,7 @@ const fetchVideoData = async (id) => {
   try {
     const url = new URL(VIDEOS_URL);
 
-    url.searchParams.append('part', 'snippet.statistics');
+    url.searchParams.append('part', 'snippet,statistics');
     url.searchParams.append('id', id);
     url.searchParams.append('key', API_KEY);
 
@@ -95,9 +116,19 @@ const fetchVideoData = async (id) => {
   }
 };
 
-const displayListVideo = (videos) => {
-  console.log('videos: ', videos);
-  videoListItems.textContent = '';
+const createListVideo = (videos, titleText, pagination) => {
+  const videoListSection = document.createElement('section');
+  videoListSection.classList.add('video-list');
+
+  const container = document.createElement('div');
+  container.classList.add('container');
+
+  const title = document.createElement('h2');
+  title.classList.add('video-list__title');
+  title.textContent = titleText;
+
+  const videoListItems = document.createElement('ul');
+  videoListItems.classList.add('video-list__items');
 
   const listVideos = videos.items.map((video) => {
     const li = document.createElement('li');
@@ -141,21 +172,17 @@ const displayListVideo = (videos) => {
     return li;
   });
   videoListItems.append(...listVideos);
+
+  return videoListSection;
 };
 
 const displayVideo = ({ items: [video] }) => {
   const videoElem = document.querySelector('.video');
-
+  console.log('video: ', video);
   videoElem.innerHtml = `
   <div class="container">
           <div class="video__player">
-            <iframe
-              class="video__iframe"
-              src="https://www.youtube.com/embed/${video.id}"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
+          <iframe src="https://www.youtube.com/embed/${video.id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
           <div class="video__container">
             <div class="video__content">
@@ -178,26 +205,94 @@ const displayVideo = ({ items: [video] }) => {
             </button>
           </div>
         </div>
-  
-  `;
+        `;
 };
 
-const init = () => {
-  const currentPage = location.pathname.split('/').pop();
-  const urlSearchParams = new URLSearchParams(location.search);
-  const videoId = urlSearchParams.get('id');
-  const searchQuery = urlSearchParams.get('q');
+const createHero = () => {
+  const heroSection = document.createElement('section');
+  heroSection.className = 'hero';
 
-  if (currentPage === 'index.html' || currentPage === '') {
-    fetchTrendingVideos().then(displayListVideo);
-  } else if (currentPage === 'video.html' && videoId) {
-    fetchVideoData(videoId).then(displayVideo);
-    console.log(videoId);
-  } else if (currentPage === 'favorite.html') {
-    fetchFavoriteVideos().then(displayListVideo);
-  } else if (currentPage === 'search.html') {
-    console.log(currentPage);
-  }
+  heroSection.innerHTML = `
+          <div class="container">
+          <div class="hero__container">
+            <a class="hero__link" href="/favorite.html"
+              ><span class="hero__link-text">Избранное</span>
+              <svg class="hero__icon">
+                <use xlink:href="/image/sprite.svg#star-ow"></use>
+              </svg>
+            </a>
+            <svg
+              class="hero__logo"
+              viewBox="0 0 347 38"
+              role="img"
+              aria-label="Логотип сервиса video-jokes"
+            >
+              <use xlink:href="/image/sprite.svg#logo-white"></use>
+            </svg>
+            <h1 class="hero__title">Смотри. Загружай. Создавай</h1>
+            <p class="hero__tagline">Смешное видео для тебя</p>
+          </div>
+        </div>
+        `;
+  return heroSection;
+};
+
+const createSearch = () => {
+  const searchSection = document.createElement('section');
+  searchSection.className = 'search';
+
+  const container = document.createElement('div');
+  container.className = 'container';
+
+  const title = document.createElement('h2');
+  title.className = 'visually-hidden';
+  title.textContent = 'Поиск';
+
+  const form = document.createElement('form');
+  form.className = 'search__form';
+
+  searchSection.append(container);
+  container.append(title, form);
+  form.innerHTML = `
+  <input
+              class="search__input"
+              type="search" name="search"
+              placeholder="Найти видео..."
+            />
+            <button class="search__btn" type="submit">
+              <span>поиск</span>
+              <svg class="search__icon">
+                <use xlink:href="/image/sprite.svg#search"></use>
+              </svg>
+            </button>
+  `;
+  return searchSection;
+};
+
+const indexRoute = async () => {
+  main.textContent = '';
+  preload.append();
+  const hero = createHero();
+  const search = createSearch();
+  const videos = await fetchTrendingVideos();
+  preload.remove();
+  const listVideo = createListVideo(videos);
+  main.append(hero, search, listVideo);
+};
+
+const videoRoute = () => {};
+const favoriteRoute = () => {};
+const searchRoute = () => {};
+
+const init = () => {
+  router
+    .on({
+      '/': indexRoute,
+      '/video/:id': videoRoute,
+      '/favorite': favoriteRoute,
+      '/search': searchRoute,
+    })
+    .resolve();
 
   document.body.addEventListener('click', ({ target }) => {
     const itemFavorite = target.closest('.favorite');
