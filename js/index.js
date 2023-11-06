@@ -202,14 +202,32 @@ const createListVideo = (videos, titleText, pagination) => {
     return li;
   });
   videoListItems.append(...listVideos);
-
-  if (pagination) {
-    //todo пагинация
-    console.log('пагинация');
-  }
-
   videoListSection.append(container);
   container.append(title, videoListItems);
+
+  if (pagination) {
+    const paginationElem = document.createElement('div');
+    paginationElem.classList.add('pagination');
+
+    if (pagination.prev) {
+      const arrowPrev = document.createElement('a');
+      arrowPrev.classList.add('pagination__arrow');
+      arrowPrev.text = 'Предыдущая страница';
+      arrowPrev.href = `#/search?q=${pagination.searchQuery}&page=${pagination.prev}`;
+      paginationElem.append(arrowPrev);
+    }
+
+    if (pagination.next) {
+      const arrowNext = document.createElement('a');
+      arrowNext.classList.add('pagination__arrow');
+      arrowNext.text = 'Следующая страница';
+      arrowNext.href = `#/search?q=${pagination.searchQuery}&page=${pagination.next}`;
+      paginationElem.append(arrowNext);
+    }
+
+    videoListSection.append(paginationElem);
+  }
+
   return videoListSection;
 };
 
