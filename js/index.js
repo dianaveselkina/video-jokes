@@ -76,7 +76,7 @@ const fetchTrendingVideos = async () => {
 
 const fetchFavoriteVideos = async () => {
   try {
-    if (favoriteIds.lenght === 0) {
+    if (favoriteIds.length === 0) {
       return { items: [] };
     }
     const url = new URL(VIDEOS_URL);
@@ -153,13 +153,15 @@ const createListVideo = (videos, titleText, pagination) => {
 
   const videoListItems = document.createElement('ul');
   videoListItems.classList.add('video-list__items');
-
-  const listVideos = videos.items.map((video) => {
+  console.log({ videos });
+  const listVideos = videos.items?.map((video) => {
     const li = document.createElement('li');
     li.classList.add('video-list__item');
     li.innerHTML = `
       <article class="video-card">
-                <a class="video-card__link" href="#/video/${video.id}">
+                <a class="video-card__link" href="#/video/${
+                  video.id.videoId || video.id
+                }">
                   <img
                     class="video-card__thumbnail"
                     src="${
@@ -173,9 +175,13 @@ const createListVideo = (videos, titleText, pagination) => {
                   <p class="video-card__channel">${
                     video.snippet.channelTitle
                   }</p>
-                  <p class="video-card__duration">${convertDuration(
-                    video.contentDetails.duration
-                  )}</p>
+                  ${
+                    video.contentDetails
+                      ? `<p class="video-card__duration">${convertDuration(
+                          video.contentDetails.duration
+                        )}</p>`
+                      : ''
+                  }
                 </a>
                 <button
                   class="video-card__favorite favorite ${
@@ -229,7 +235,7 @@ const createVideo = (video) => {
                 Смотрите наш курс-саммари «Как понимать философию» фоном.
               </p>
             </div>
-            <button class="video__link favorite" href="/favorite.html">
+            <button class="video__link favorite" href="#/favorite">
               <span class="video__no-favorite">Избранное</span>
               <span class="video__favorite">В избранном</span>
               <svg class="video__icon">
@@ -315,6 +321,11 @@ const indexRoute = async () => {
 };
 
 const createHeader = () => {
+  const header = document.querySelector('header');
+
+  if (header) {
+    return header;
+  }
   const headerElem = document.createElement('header');
 
   headerElem.innerHTML = `
@@ -329,7 +340,7 @@ const createHeader = () => {
             <use xlink:href="/image/sprite.svg#logo-turquoise"></use>
           </svg>
         </a>
-        <a class="header__link header__link_favorite" href="/favorite.html"
+        <a class="header__link header__link_favorite" href="#/favorite"
           ><span class="header__link-text">Избранное</span>
           <svg class="header__icon">
             <use xlink:href="/image/sprite.svg#star-ob"></use>
@@ -357,7 +368,16 @@ const videoRoute = async (ctx) => {
   const listVideo = createListVideo(video, 'Похожие видео');
   main.append(listVideo);
 };
-const favoriteRoute = () => {};
+const favoriteRoute = async () => {
+  document.body.prepend(createHeader());
+  main.textContent = '';
+  preload.append();
+  const search = createSearch();
+  const videos = await fetchFavoriteVideos();
+  preload.remove();
+  const listVideo = createListVideo(videos, 'Избранное');
+  main.append(search, listVideo);
+};
 const searchRoute = () => {};
 
 const init = () => {
