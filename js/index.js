@@ -153,8 +153,7 @@ const createListVideo = (videos, titleText, pagination) => {
 
   const videoListItems = document.createElement('ul');
   videoListItems.classList.add('video-list__items');
-  console.log({ videos });
-  const listVideos = videos.items?.map((video) => {
+  const listVideos = videos.items.map((video) => {
     const li = document.createElement('li');
     li.classList.add('video-list__item');
     li.innerHTML = `
@@ -297,7 +296,7 @@ const createSearch = () => {
   <input
               class="search__input"
               type="search" name="search"
-              placeholder="Найти видео..."
+              placeholder="Найти видео..." required
             />
             <button class="search__btn" type="submit">
               <span>поиск</span>
@@ -306,6 +305,14 @@ const createSearch = () => {
               </svg>
             </button>
   `;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (form.search.value.trim()) {
+      router.navigate(`/search?q=${form.search.value}`);
+    }
+  });
+
   return searchSection;
 };
 
@@ -330,7 +337,7 @@ const createHeader = () => {
 
   headerElem.innerHTML = `
         <div class="container header__container">
-        <a class="header__link" href="/">
+        <a class="header__link" href="#">
           <svg
             class="header__logo"
             viewBox="0 0 347 38"
@@ -378,7 +385,25 @@ const favoriteRoute = async () => {
   const listVideo = createListVideo(videos, 'Избранное');
   main.append(search, listVideo);
 };
-const searchRoute = () => {};
+const searchRoute = async (ctx) => {
+  const searchQuery = ctx.params.q;
+  const page = ctx.params.page;
+
+  if (searchQuery) {
+    document.body.prepend(createHeader());
+    main.textContent = '';
+    preload.append();
+    const search = createSearch();
+    const videos = await fetchSearchVideos(searchQuery, page);
+    preload.remove();
+    const listVideo = createListVideo(videos, 'Избранное', {
+      searchQuery,
+      next: videos.nextPageToken,
+      prev: videos.prevPageToken,
+    });
+    main.append(search, listVideo);
+  }
+};
 
 const init = () => {
   router
