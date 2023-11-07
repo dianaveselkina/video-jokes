@@ -153,6 +153,7 @@ const createListVideo = (videos, titleText, pagination) => {
 
   const videoListItems = document.createElement('ul');
   videoListItems.classList.add('video-list__items');
+  console.log({ videos });
   const listVideos = videos.items.map((video) => {
     const li = document.createElement('li');
     li.classList.add('video-list__item');
@@ -201,7 +202,9 @@ const createListVideo = (videos, titleText, pagination) => {
       `;
     return li;
   });
+
   videoListItems.append(...listVideos);
+
   videoListSection.append(container);
   container.append(title, videoListItems);
 
@@ -235,22 +238,21 @@ const createVideo = (video) => {
   const videoSection = document.createElement('section');
   videoSection.classList.add('video');
 
-  videoSection.innerHtml = `
+  videoSection.innerHTML = `
   <div class="container">
           <div class="video__player">
-          <iframe src="https://www.youtube.com/embed/${video.id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <iframe class="video__iframe" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
           <div class="video__container">
             <div class="video__content">
               <h3 class="video__title">${video.snippet.title}</h3>
-              <p class="video__channel">Правое полушарие интроверта</p>
+              <p class="video__channel">${video.snippet.channelTitle}</p>
               <p class="video__info">
                 <span class="video__views">1 575 581 просмотр</span>
                 <span class="video__date">Дата премьеры: 16 авг. 2024 г.</span>
               </p>
               <p class="video__description">
-                Смотрите наш курс-саммари «Как понимать философию» фоном.
-              </p>
+                            </p>
             </div>
             <button class="video__link favorite" href="#/favorite">
               <span class="video__no-favorite">Избранное</span>
