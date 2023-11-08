@@ -52,6 +52,16 @@ const convertDuration = (isoDuration) => {
 
   return result.trim();
 };
+const formatDate = (isoString) => {
+  const date = new Date(isoString);
+
+  const formatter = new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+  return formatter.format(date);
+};
 
 const fetchTrendingVideos = async () => {
   try {
@@ -153,7 +163,6 @@ const createListVideo = (videos, titleText, pagination) => {
 
   const videoListItems = document.createElement('ul');
   videoListItems.classList.add('video-list__items');
-  console.log({ videos });
   const listVideos = videos.items.map((video) => {
     const li = document.createElement('li');
     li.classList.add('video-list__item');
@@ -241,19 +250,24 @@ const createVideo = (video) => {
   videoSection.innerHTML = `
   <div class="container">
           <div class="video__player">
-          <iframe class="video__iframe" src="https://www.youtube.com/embed/${video.id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <iframe class="video__iframe" src="https://www.youtube.com/embed/${
+            video.id
+          }" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
           </div>
           <div class="video__container">
             <div class="video__content">
               <h3 class="video__title">${video.snippet.title}</h3>
               <p class="video__channel">${video.snippet.channelTitle}</p>
               <p class="video__info">
-                <span class="video__views">1 575 581 просмотр</span>
-                <span class="video__date">Дата премьеры: 16 авг. 2024 г.</span>
+                <span class="video__views">Просмотры: ${parseInt(
+                  video.statistics.viewCount
+                ).toLocaleString()}</span><br/>
+                <span class="video__date">Дата премьеры: ${formatDate(
+                  video.snippet.publishedAt
+                )}</span>
               </p>
-              <p class="video__description">
-                            </p>
-            </div>
+              <p class="video__description">${video.snippet.description}</p>
+          </div>
             <button class="video__link favorite" href="#/favorite">
               <span class="video__no-favorite">Избранное</span>
               <span class="video__favorite">В избранном</span>
@@ -343,7 +357,7 @@ const indexRoute = async () => {
   const search = createSearch();
   const videos = await fetchTrendingVideos();
   preload.remove();
-  const listVideo = createListVideo(videos);
+  const listVideo = createListVideo(videos, 'В тренде');
   main.append(hero, search, listVideo);
 };
 
