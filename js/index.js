@@ -296,14 +296,14 @@ const createHero = () => {
             </a>
             <svg
               class="hero__logo"
-              viewBox="0 0 347 38"
+              viewBox="0 0 279 31"
               role="img"
-              aria-label="Логотип сервиса video-jokes"
+              aria-label="Логотип сервиса watch daily"
             >
               <use xlink:href="/image/sprite.svg#logo-white"></use>
             </svg>
-            <h1 class="hero__title">Смотри. Загружай. Создавай</h1>
-            <p class="hero__tagline">Смешное видео для тебя</p>
+            <h1 class="hero__title">СМОТРИ  ЕЖЕДНЕВНО</h1>
+            <p class="hero__tagline">видео для тебя</p>
           </div>
         </div>
         `;
@@ -374,9 +374,9 @@ const createHeader = () => {
         <a class="header__link" href="#">
           <svg
             class="header__logo"
-            viewBox="0 0 347 38"
+            viewBox="0 0 279 31"
             role="img"
-            aria-label="Логотип сервиса video-jokes"
+            aria-label="Логотип сервиса watch daily"
           >
             <use xlink:href="/image/sprite.svg#logo-turquoise"></use>
           </svg>
