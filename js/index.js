@@ -371,7 +371,7 @@ const createHeader = () => {
 
   headerElem.innerHTML = `
         <div class="container header__container">
-        <a class="header__link" href="#">
+        <a class="header__link" href="/">
           <svg
             class="header__logo"
             viewBox="0 0 279 31"
