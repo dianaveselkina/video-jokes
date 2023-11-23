@@ -1,9 +1,7 @@
 const API_KEY = 'AIzaSyBHBWWQGCxKyKGmCq7bh2NvsMFuFlutoAQ';
 const VIDEOS_URL = 'https://www.googleapis.com/youtube/v3/videos';
 const SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
-const router = new Navigo('/https://github.com/dianaveselkina/video-jokes', {
-  hash: true,
-});
+const router = new Navigo('/', { hash: true });
 const main = document.querySelector('main');
 
 const favoriteIds = JSON.parse(localStorage.getItem('favoriteVJ') || '[]');
