@@ -9,4 +9,4 @@
 * SVG
 * JavaScript
 
-![banner](https://github.com/dianaveselkina/NFTmarketplace/assets/120037350/8ad1975d-6918-4836-9b52-ed357fdee187)
+![banner](https://github.com/dianaveselkina/video-jokes/blob/main/watch%20deily.jpg)
