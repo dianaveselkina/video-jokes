@@ -1,5 +1,6 @@
 # watch deily
- [Посмотри...](https://watch-daily.netlify.app/). 
+Просмотр видео с ютуба, поиск видео, сохранение в избранное
+ [Интересно посмотри...](https://watch-daily.netlify.app/). 
 
  
 Стек технологий
@@ -8,4 +9,4 @@
 * SVG
 * JavaScript
 
-![scrin album](https://github.com/dianaveselkina/video-jokes/commit/cc3a267b7aa8ba9750d3ab514abd2cfb5a514a97)
+![scrin album](https://i.yapx.ru/WzZVQ.png)
