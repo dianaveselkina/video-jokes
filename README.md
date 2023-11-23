@@ -5,6 +5,7 @@
 Стек технологий
 * HTML
 * CSS
+* SVG
 * JavaScript
 
-![scrin album](https://github.com/dianaveselkina/go-scooter-pass/blob/main/scooter.png)
+![scrin album](https://github.com/dianaveselkina/video-jokes/commit/cc3a267b7aa8ba9750d3ab514abd2cfb5a514a97)
